@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         if (pathElements[0] != '') return null;
         if (pathElements[1] == 'services') return MaterialPageRoute(builder: (BuildContext context) => Results(pathElements[2]));
       },
+      onUnknownRoute: (RouteSettings settings) { return MaterialPageRoute(builder: (BuildContext context) => MainMenu()); }
     );
   }
 }
