@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../results.dart';
-
 class Services extends StatelessWidget {
   final List<String> categories;
   Services(this.categories);

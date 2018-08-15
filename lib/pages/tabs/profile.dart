@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../model/user.dart';
+
 class Profile extends StatelessWidget {
+  final User user;
+  Profile(this.user);
+
   @override
     Widget build(BuildContext context) {
-      // TODO: implement build
-      return Center(child: Text('Profile'));
+      return user;
     }
 }
