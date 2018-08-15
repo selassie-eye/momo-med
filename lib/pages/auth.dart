@@ -37,9 +37,7 @@ class AuthPage extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       appBar: TitleBar('Welcome').build(context),
-      body: Container(margin: EdgeInsets.all(10.0), child: Column(
-        children: <Widget>[
-          Expanded(child: ListView(children: <Widget>[
+      body: Container(margin: EdgeInsets.all(10.0), child: ListView(children: <Widget>[
             _inputField('First Name'),
             _inputField('Last Name'),
             _inputField('Username'),
@@ -47,9 +45,7 @@ class AuthPage extends StatelessWidget {
             _inputField('ZIP', true),
             _privacySwitch('Privacy'),
             _inputButton('Submit', context),
-          ],),),
-        ],
-      ),)
+      ],),),
     );
   }
 }

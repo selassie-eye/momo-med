@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../model/user.dart';
+import '../../controller/user-controller.dart';
 
 class Profile extends StatelessWidget {
-  final User user;
+  final UserController user;
   Profile(this.user);
 
   @override

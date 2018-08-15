@@ -4,19 +4,12 @@ import './pages/auth.dart';
 import './pages/main-menu.dart';
 import './pages/adv-search.dart';
 import './pages/results.dart';
-import './model/user.dart';
+
+import './controller/user-controller.dart';
 
 void main() => runApp(MyApp()); 
 
 class MyApp extends StatefulWidget {
-  final UserMap userMap = UserMap({
-    'First Name': '',
-    'Last Name': '',
-    'Username': '',
-    'Password': '',
-    'ZIP': 0,
-    'Privacy': false
-  });
 
   @override
     State<StatefulWidget> createState() {
@@ -25,14 +18,14 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  User user;
+  UserController user;
 
   dynamic userGet(String key) { return user.get(key); }
   void userSet(String key, dynamic value) { setState(() { user.set(key, value); }); }
 
   @override
     void initState() {
-      user = User(widget.userMap);
+      user = UserController();
       super.initState();
     }
 

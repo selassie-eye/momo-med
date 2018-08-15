@@ -4,14 +4,14 @@ import './tabs/services.dart';
 import './tabs/favorites.dart';
 import './tabs/profile.dart';
 import './tabs/privacy.dart';
-import './adv-search.dart';
 
 import '../widgets/title.dart';
 import '../search.dart';
-import '../model/user.dart';
+
+import '../controller/user-controller.dart';
 
 class MainMenu extends StatelessWidget {
-  User user;
+  UserController user;
   MainMenu([this.user]);
 
   @override
