@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import './pages/auth.dart';
 import './pages/main-menu.dart';
@@ -7,7 +8,16 @@ import './pages/results.dart';
 
 import './controller/user-controller.dart';
 
-void main() => runApp(MyApp()); 
+void main() {
+  //  Debug Options
+  //  ---------------------------------------------
+  //  debugPaintSizeEnabled = true;
+  //  debugPaintBaselinesEnabled = true;
+  //  debugPaintPointersEnabled = true;
+  //  ---------------------------------------------
+
+  runApp(MyApp()); 
+}
 
 class MyApp extends StatefulWidget {
 
