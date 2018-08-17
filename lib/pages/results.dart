@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
+import './result-details.dart';
+
 import '../widgets/title.dart';
 import '../model/venue.dart';
 
@@ -35,7 +37,8 @@ class Results extends StatelessWidget {
     return Column(children: <Widget>[
       ListTile(
         leading: Icon(Icons.healing),
-        title: venues[index].name != '' ? Text(venues[index].name) : Text('null')
+        title: venues[index].name != '' ? Text(venues[index].name) : Text('null'),
+        onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => ResultDetails(venues[index]))),
       ),
       Divider()
     ],);
