@@ -1,0 +1,17 @@
+{
+  "name": "momo-med",
+  "version": "1.0.0",
+  "description": "MoMo Med Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Khari Ollivierre",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "fetch": "^1.1.0",
+    "request": "^2.88.0",
+    "whatwg-fetch": "^2.0.4"
+  }
+}

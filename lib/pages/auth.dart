@@ -9,11 +9,13 @@ class AuthPage extends StatelessWidget {
 
   void _updateInput(String key, dynamic value) { userSet(key, value); }
 
-  TextField _inputField(String key, [bool isNumber = false]) {
-    return TextField(
-      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-      decoration: InputDecoration(labelText: key),
-      onChanged: (String value) => isNumber ? _updateInput(key, int.parse(value)) : _updateInput(key, value)
+  Container _inputField(String key, [bool isNumber = false]) {
+    return Container(
+      child: TextField(
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(labelText: key),
+        onChanged: (String value) => isNumber ? _updateInput(key, int.parse(value)) : _updateInput(key, value)
+      ),
     );
   }
 
@@ -34,6 +36,7 @@ class AuthPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    print('Testing!');
     // TODO: implement build
     return Scaffold(
       appBar: TitleBar('Welcome').build(context),
