@@ -1,25 +1,38 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
-import 'package:http/http.dart' as http;
 
 import './result-details.dart';
 
 import '../widgets/title.dart';
 import '../model/venue.dart';
 
-class Results extends StatelessWidget {
+class Results extends StatefulWidget {
   final String pageTitle;
+  final Function update;
   final Function fetch;
-  Results(this.pageTitle, this.fetch);
+  Results(this.pageTitle, this.update, this.fetch);
 
+  @override
+    State<StatefulWidget> createState() {
+      // TODO: implement createState
+      return _ResultsState();
+    }
+}
+
+class _ResultsState extends State<Results> {
   List<Venue> venues;
 
+  @override
+    void initState() {
+      super.initState();
+      venues = [];
+    }
+
   FutureBuilder _buildResultsFuture() {
+    widget.update(query: widget.pageTitle);
     return FutureBuilder(
-      future: fetch(pageTitle),
+      future: widget.fetch(),
       builder: (context, snapshot) {
         switch(snapshot.connectionState) {
           case ConnectionState.none: return Center(child: Text('Nothing to see!'),);
@@ -44,17 +57,17 @@ class Results extends StatelessWidget {
     ],);
   }
 
-  ListView _buildResultsList() {
+  Widget _buildResultsList() {
     return venues.length > 0 ? ListView.builder(
       itemBuilder: _buildResultTile,
       itemCount: venues.length,
-    ) : Center(child: Text('No results for $pageTitle'));
+    ) : Center(child: Text('No results for ${widget.pageTitle}'));
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(child: Scaffold(
-      appBar: TitleBar(pageTitle).build(context),
+      appBar: TitleBar(widget.pageTitle).build(context),
       body: _buildResultsFuture()
     ),
     onWillPop: () {

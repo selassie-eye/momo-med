@@ -10,8 +10,14 @@ import './pages/auth.dart';
 import './pages/main-menu.dart';
 import './pages/adv-search.dart';
 import './pages/results.dart';
+import './pages/search-page.dart';
+
+import './pages/test/categories-test.dart';
+import './pages/test/test-page.dart';
+import './pages/test/search-test.dart';
 
 import './controller/user-controller.dart';
+import './controller/search-controller.dart';
 
 import './model/venue.dart';
 
@@ -35,6 +41,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  SearchController search;
   UserController user;
 
   dynamic userGet(String key) { return user.get(key); }
@@ -49,8 +56,20 @@ class MyAppState extends State<MyApp> {
       if (res.statusCode == 200) {
         List<dynamic> parsedBody = json.decode(res.body);
         parsedBody.forEach((dynamic e) {
-          if(e.containsKey('venue')) ret.add(Venue.fromJSON(e['venue']));
+          ret.add(Venue.fromJSON(e));
         });
+      }
+    });
+
+    return Future.value(ret);
+  }
+
+  Future<Map<String, dynamic>> getCategories() async {
+    final String _url = 'https://us-central1-momo-medical.cloudfunctions.net/getCategories';
+    Map<String, dynamic> ret = {};
+    await http.get(_url).then((http.Response res) {
+      if (res.statusCode == 200) {
+        ret = json.decode(res.body);
       }
     });
 
@@ -59,24 +78,29 @@ class MyAppState extends State<MyApp> {
 
   @override
     void initState() {
-      user = UserController();
       super.initState();
+      user = UserController();
+      search = SearchController();
     }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: AuthPage(userGet, userSet),
+      home: TestPage(),
       routes: {
         '/main-menu': (BuildContext context) => MainMenu(user),
         '/adv-search': (BuildContext context) => AdvSearch(),
+        '/auth': (BuildContext context) => AuthPage(userGet, userSet),
+        '/search': (BuildContext context) => SearchPage(),
+        '/categories-test': (BuildContext context) => CategoriesTest(getCategories),
+        '/search-test': (BuildContext context) => SearchTest(search.updateQuery, search.searchQuery)
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
         if (pathElements[0] != '') return null;
         if (pathElements[1] == 'services') {
           // _fetchResults(pathElements[2]).then((List<Venue> e) => print(e.toString()));
-          return MaterialPageRoute(builder: (BuildContext context) => Results(pathElements[2], _fetchResults));
+          return MaterialPageRoute(builder: (BuildContext context) => Results(pathElements[2], search.updateQuery, search.searchQuery));
         }
       },
       onUnknownRoute: (RouteSettings settings) { return MaterialPageRoute(builder: (BuildContext context) => MainMenu()); }

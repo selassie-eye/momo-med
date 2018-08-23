@@ -18,11 +18,17 @@ class Venue extends StatelessWidget {
     );
   }
 
+  void log(){
+    print('id: $id');
+    print('name: $name');
+  }
+
   Widget _buildVenueCard() {
     return Card(child: Column(children: <Widget>[
       Image(image: AssetImage('assets/logo.png')),
       Container(margin: EdgeInsets.all(10.0), child: Text(name)),
       Container(margin: EdgeInsets.all(10.0), child: Text('${location['address']}, ${location['city']}, ${location['state']} ${location['postalCode']}')),
+      Divider()
     ],),);
   }
 
