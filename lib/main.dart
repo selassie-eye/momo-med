@@ -91,7 +91,7 @@ class MyAppState extends State<MyApp> {
         '/main-menu': (BuildContext context) => MainMenu(user),
         '/adv-search': (BuildContext context) => AdvSearch(),
         '/auth': (BuildContext context) => AuthPage(userGet, userSet),
-        '/search': (BuildContext context) => SearchPage(),
+        '/search': (BuildContext context) => SearchPage(search.updateQuery, search.searchQuery),
         '/categories-test': (BuildContext context) => CategoriesTest(getCategories),
         '/search-test': (BuildContext context) => SearchTest(search.updateQuery, search.searchQuery)
       },

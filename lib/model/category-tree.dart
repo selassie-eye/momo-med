@@ -2,7 +2,7 @@ class CategoryTree {
   Map<String, dynamic> _tree;
   CategoryTree(this._tree);
 
-  List<String> all() {
+  List<String> toList() {
     List<String> ret = [];
     if(_tree.containsKey('id')) ret.add(_tree['id']);
     List<dynamic> children = _tree.containsKey('categories') ? _tree['categories'] : [];
@@ -11,5 +11,4 @@ class CategoryTree {
     }
     return ret;
   }
-
 }

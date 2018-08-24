@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
+import './result-details.dart';
+
+import '../model/venue.dart';
+
 class SearchPage extends StatefulWidget {
+  final Function update;
+  final Function search;
+  SearchPage(this.update, this.search);
+
   @override
     State<StatefulWidget> createState() {
       // TODO: implement createState
@@ -10,15 +18,21 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   bool isSearching;
+  bool searchSubmitted;
+  IconButton sendIcon;
   IconButton searchIcon;
   PopupMenuButton advSearchButton;
   Widget searchTitle;
+  Widget searchBody;
   String query;
+
+  List<Venue> results;
 
   @override
     void initState() {
       super.initState();
       isSearching = false;
+      searchSubmitted = false;
       searchIcon = _buildSearchIcon();
       advSearchButton = new PopupMenuButton<String>(
         onSelected: (String value) => Navigator.pushNamed(context, value),
@@ -27,7 +41,18 @@ class _SearchPageState extends State<SearchPage> {
             value: '/adv-search',
             child: Text('Advanced Search')
       ),],);
+      sendIcon = IconButton(
+        icon: Icon(Icons.arrow_forward),
+        onPressed: () {
+          print('Submitted');
+          widget.update(query: query);
+          setState(() { searchSubmitted = true; });
+          _buildSearchPage();
+        },
+      );
       searchTitle = Text('Search');
+      searchBody = Center(child: Text('No results'));
+      results = [];
     }
 
   IconButton _buildSearchIcon() {
@@ -45,9 +70,23 @@ class _SearchPageState extends State<SearchPage> {
   void _openSearchBox() {
     setState(() {
       isSearching = true;
-      searchTitle = TextField(
-        decoration: InputDecoration(icon: Icon(Icons.search), labelText: 'Search'),
-        style: TextStyle(color: Colors.white),
+      searchTitle = Container(
+        padding: EdgeInsets.all(10.0),
+        child: TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            icon: Icon(Icons.search), labelText: 'Search',
+          ),
+          style: TextStyle(color: Colors.white),
+          // IOS bug: onSubmitted does not trigger when the "done" button is pressed on the keyboard
+          onSubmitted: (val) {
+            print('Submitted');
+            widget.update(query: val);
+            setState(() { searchSubmitted = true; });
+            _buildSearchPage();
+          },
+          onChanged: (val) { setState(() { query = val; }); },
+        )
       );
       searchIcon = _buildSearchIcon();      
     });
@@ -65,14 +104,60 @@ class _SearchPageState extends State<SearchPage> {
     return AppBar(
       title: searchTitle,
       actions: <Widget>[
+        sendIcon,
         searchIcon,
         advSearchButton,  
       ],
     );
   }
 
-  Widget _buildSearchPage() {
-    return Container();
+  FutureBuilder _buildResultsFuture() {
+    print('Future called!');
+    return FutureBuilder(
+      future: widget.search(),
+      builder: (context, snapshot) {
+        switch(snapshot.connectionState) {
+          case ConnectionState.none: return Center(child: Text('No results:ConnectionState.none'),);
+          case ConnectionState.waiting: return Center(child: Text('Loading...'),);
+          case ConnectionState.done:
+            results = snapshot.data;
+            return _buildResultsList();
+          default: return Center(child: Text('No results:ConnectionState.default'),);
+        }
+      }
+    );
+  }
+
+    Column _buildResultTile(BuildContext context, int index) {
+    return Column(children: <Widget>[
+      ListTile(
+        leading: Icon(Icons.healing),
+        title: results[index].name != '' ? Text(results[index].name) : Text('null'),
+        onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => ResultDetails(results[index]))),
+      ),
+      Divider()
+    ],);
+  }
+
+  Widget _buildResultsList() {
+    return results.length > 0 ? ListView.builder(
+      itemBuilder: _buildResultTile,
+      itemCount: results.length,
+    ) : Center(child: Text('No results!'));
+  }
+
+  void _buildSearchPage() {
+    print('Build search called');
+    if(searchSubmitted) {
+      print('Search submitted');
+      setState(() { 
+        searchBody = _buildResultsFuture(); 
+        searchSubmitted = false;
+      });
+    } else setState(() { 
+        print('Search not submitted');
+        searchBody = _buildResultsList(); 
+      });
   }
 
 
@@ -81,7 +166,7 @@ class _SearchPageState extends State<SearchPage> {
       // TODO: implement build
       return Scaffold(
         appBar: _buildAppBar(),
-        body: _buildSearchPage()
+        body: searchBody
       );
     }
 }

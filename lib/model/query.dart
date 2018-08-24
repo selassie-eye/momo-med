@@ -26,10 +26,10 @@ class Query {
     baseURL += '&radius=$radius';
     baseURL += '&intent=browse';
     baseURL += query.isNotEmpty ? '&query=$query' : '';
+    baseURL += '&categoryId=';
     if(categories.isNotEmpty) {
-      baseURL += '&categoryId='; 
       categories.forEach((String s) => baseURL += '$s,');
-    }
+    } else baseURL += '4bf58dd8d48988d104941735';
     print(baseURL);
     return baseURL;
   }
