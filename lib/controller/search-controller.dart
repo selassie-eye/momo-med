@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import './categories-controller.dart';
-
 import '../model/category-tree.dart';
 import '../model/query.dart';
 import '../model/venue.dart';

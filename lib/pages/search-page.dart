@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './result-details.dart';
 
 import '../model/venue.dart';
+import '../model/services.dart';
 
 class SearchPage extends StatefulWidget {
   final Function update;
@@ -26,7 +27,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget searchBody;
   String query;
 
-  List<Venue> results;
+  List<Venue> results = [];
 
   @override
     void initState() {
@@ -160,11 +161,51 @@ class _SearchPageState extends State<SearchPage> {
       });
   }
 
+  Widget _buildDrawerItem(BuildContext context, int index) {
+    return Column(children: <Widget>[
+      ListTile(
+        title: Text(Services.list[index]),
+        trailing: Icon(Icons.local_hospital),
+        onTap: () {
+          setState(() { 
+            searchSubmitted = true;
+            query = Services.list[index];
+            //  TODO: category should also be updated here
+          });
+          widget.update(query: query);
+          _buildSearchPage();
+        }
+      ),
+      Divider()
+    ],);
+  }
+
+  Widget _buildDrawerList() {
+    return Expanded(
+      child: Services.list.length > 0 ? ListView.builder(
+        itemBuilder: _buildDrawerItem,
+        itemCount: Services.list.length,
+      ) : Text('Nothing to search.'),
+    );
+  }
+
 
   @override
     Widget build(BuildContext context) {
-      // TODO: implement build
       return Scaffold(
+        drawer: Drawer(child: Column(children: <Widget>[
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Menu'),
+          ),
+          ListTile(
+            title: Text('Featured', style: TextStyle(fontWeight: FontWeight.bold),),
+            trailing: Icon(Icons.star),
+            onTap: () => Navigator.pushNamed(context, '/featured'),
+          ),
+          Divider(),
+          _buildDrawerList()
+        ],),),
         appBar: _buildAppBar(),
         body: searchBody
       );

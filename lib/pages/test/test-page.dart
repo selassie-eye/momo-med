@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum Pages {
+  featured,
   searchtest,
   cattest,
   search,
@@ -18,6 +19,7 @@ enum Pages {
 class TestPage extends StatelessWidget {
   List<Pages> pageList;
   TestPage() { pageList = [
+    Pages.featured,
     Pages.searchtest,
     Pages.cattest,
     Pages.search,
@@ -34,6 +36,7 @@ class TestPage extends StatelessWidget {
 
   String _parsePage(Pages page) {
     switch (page) {
+      case Pages.featured: return '/featured';
       case Pages.searchtest: return '/search-test';
       case Pages.cattest: return '/categories-test';
       case Pages.search: return '/search';

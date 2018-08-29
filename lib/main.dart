@@ -11,6 +11,8 @@ import './pages/main-menu.dart';
 import './pages/adv-search.dart';
 import './pages/results.dart';
 import './pages/search-page.dart';
+import './pages/featured.dart';
+import './pages/signin.dart';
 
 import './pages/test/categories-test.dart';
 import './pages/test/test-page.dart';
@@ -43,26 +45,10 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   SearchController search;
   UserController user;
+  List<Venue> featured;
 
   dynamic userGet(String key) { return user.get(key); }
   void userSet(String key, dynamic value) { setState(() { user.set(key, value); }); }
-  
-  Future<List<Venue>> _fetchResults(String query) async {
-    final String _ll = '29.6478,-82.33784'; //  TEMPORARY TEST VALUE
-    final String _baseURL = 'https://us-central1-momo-medical.cloudfunctions.net/searchRequest?ll=$_ll&search=$query';
-    
-    List<Venue> ret = [];
-    await http.get(_baseURL).then((http.Response res) {
-      if (res.statusCode == 200) {
-        List<dynamic> parsedBody = json.decode(res.body);
-        parsedBody.forEach((dynamic e) {
-          ret.add(Venue.fromJSON(e));
-        });
-      }
-    });
-
-    return Future.value(ret);
-  }
 
   Future<Map<String, dynamic>> getCategories() async {
     final String _url = 'https://us-central1-momo-medical.cloudfunctions.net/getCategories';
@@ -81,19 +67,22 @@ class MyAppState extends State<MyApp> {
       super.initState();
       user = UserController();
       search = SearchController();
+      search.updateQuery(query: '');
+      search.searchQuery().then((val) => featured = val);
     }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TestPage(),
+      home: Signin(),
       routes: {
         '/main-menu': (BuildContext context) => MainMenu(user),
         '/adv-search': (BuildContext context) => AdvSearch(),
         '/auth': (BuildContext context) => AuthPage(userGet, userSet),
         '/search': (BuildContext context) => SearchPage(search.updateQuery, search.searchQuery),
         '/categories-test': (BuildContext context) => CategoriesTest(getCategories),
-        '/search-test': (BuildContext context) => SearchTest(search.updateQuery, search.searchQuery)
+        '/search-test': (BuildContext context) => SearchTest(search.updateQuery, search.searchQuery),
+        '/featured': (BuildContext context) => Featured(featured)
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
