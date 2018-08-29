@@ -173,6 +173,7 @@ class _SearchPageState extends State<SearchPage> {
             //  TODO: category should also be updated here
           });
           widget.update(query: query);
+          Navigator.pop(context);
           _buildSearchPage();
         }
       ),
@@ -201,7 +202,10 @@ class _SearchPageState extends State<SearchPage> {
           ListTile(
             title: Text('Featured', style: TextStyle(fontWeight: FontWeight.bold),),
             trailing: Icon(Icons.star),
-            onTap: () => Navigator.pushNamed(context, '/featured'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/featured');
+            },
           ),
           Divider(),
           _buildDrawerList()

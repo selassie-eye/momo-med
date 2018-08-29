@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:map_view/map_view.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -23,7 +24,10 @@ import './controller/search-controller.dart';
 
 import './model/venue.dart';
 
+
 void main() {
+  MapView.setApiKey(SearchController.googleAPIKey);
+
   //  Debug Options
   //  ---------------------------------------------
   //  debugPaintSizeEnabled = true;
@@ -45,7 +49,16 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   SearchController search;
   UserController user;
-  List<Venue> featured;
+  List<Venue> featured = [];
+
+  @override
+    void initState() {
+      super.initState();
+      user = UserController();
+      search = SearchController();
+      search.updateQuery(query: '');
+      search.searchQuery().then((val) => featured = val);
+    }
 
   dynamic userGet(String key) { return user.get(key); }
   void userSet(String key, dynamic value) { setState(() { user.set(key, value); }); }
@@ -62,14 +75,7 @@ class MyAppState extends State<MyApp> {
     return Future.value(ret);
   }
 
-  @override
-    void initState() {
-      super.initState();
-      user = UserController();
-      search = SearchController();
-      search.updateQuery(query: '');
-      search.searchQuery().then((val) => featured = val);
-    }
+
 
   @override
   Widget build(BuildContext context) {

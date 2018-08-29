@@ -7,13 +7,19 @@ import '../model/category-tree.dart';
 import '../model/query.dart';
 import '../model/venue.dart';
 
+import 'package:map_view/map_view.dart';
+
 class SearchController {
+  static String googleAPIKey = 'AIzaSyBfDZgMA7A8uoTbaaXSMlyvuA5rH4rS6i4';
+
   CategoryTree categories;
   Query query;
+  StaticMapProvider mapProvider;
 
   SearchController() {
     _getCategories().then((value) => categories = CategoryTree(value));
     query = Query();
+    mapProvider = StaticMapProvider(googleAPIKey);
   }
 
   Query updateQuery({String query = '', int radius = Query.defaultRadius, double lat = Query.defaultLat, double lng = Query.defaultLng, List<String> categories = const []}) {
@@ -40,7 +46,7 @@ class SearchController {
         bodyJSON = json.decode(res.body);
       }
     });
-    bodyJSON.forEach((e) => ret.add(Venue.fromJSON(e)));
+    bodyJSON.forEach((e) => ret.add(Venue.fromJSON(mapProvider, e)));
     return Future.value(ret);
   }
 }
