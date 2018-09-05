@@ -55,10 +55,10 @@ var search = (query, callback) => {
         console.dir(meta);
 
         let bodyJSON = JSON.parse(body);
-        console.log('BODY');
-        console.dir(bodyJSON);
+        //  console.log('BODY');
+        //  console.dir(bodyJSON);
 
-        callback(bodyJSON.response.venues);
+        callback(bodyJSON.results);
     });
 }
 

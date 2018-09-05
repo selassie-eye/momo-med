@@ -7,6 +7,8 @@ const categories = require('./foursquare-api').categories
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
 
+var _placesAPIKey = 'AIzaSyDWR6zUgE9BfMQU-u_p21yJqXlp5CbbBfA';
+
 var _clientID = '1MV24XBQKT1231E3PZPXOLKS32AX3DQLEZP21D1R0TYTL1I0';
 var _clientSecret = 'GA1Z3CUGDTBPYTBIP4DHDUR1LXTPJX3TKRELITHF43OGHNMP';
 var _v = '20180816';
@@ -19,8 +21,8 @@ admin.initializeApp();
 exports.searchRequest = functions.https.onRequest((req, res) => {
     console.log(req.originalUrl);
     const clientQuery = req.originalUrl.split('?')[1];
-    const header = `client_id=${_clientID}&client_secret=${_clientSecret}&v=${_v}&` 
-    const apiRequest = 'https://api.foursquare.com/v2/venues/search?' + header + clientQuery;
+    const header = `&key=${_placesAPIKey}`;
+    const apiRequest = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + clientQuery + header;
     console.log(apiRequest);
 
     search(apiRequest, (body) => {

@@ -11,7 +11,7 @@ class SearchTest extends StatelessWidget {
       return Center(child: RaisedButton(
         child: Text('Search Test'),
         onPressed: () {
-          update(query: 'Hospital');
+          update(keyword: 'Hospital');
           search().then((val) => val.forEach((e) => e.log()));
         },
       ),);

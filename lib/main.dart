@@ -20,13 +20,13 @@ import './pages/test/test-page.dart';
 import './pages/test/search-test.dart';
 
 import './controller/user-controller.dart';
-import './controller/search-controller.dart';
+import './controller/google-api.dart';
 
 import './model/venue.dart';
 
 
 void main() {
-  MapView.setApiKey(SearchController.googleAPIKey);
+  MapView.setApiKey(GoogleAPI.googleAPIKey);
 
   //  Debug Options
   //  ---------------------------------------------
@@ -47,7 +47,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  SearchController search;
+  GoogleAPI places;
   UserController user;
   List<Venue> featured = [];
 
@@ -55,9 +55,9 @@ class MyAppState extends State<MyApp> {
     void initState() {
       super.initState();
       user = UserController();
-      search = SearchController();
-      search.updateQuery(query: '');
-      search.searchQuery().then((val) => featured = val);
+      places = GoogleAPI();
+      places.updateQuery(keyword: 'hospital');
+      places.searchQuery().then((val) => featured = val);
     }
 
   dynamic userGet(String key) { return user.get(key); }
@@ -75,27 +75,25 @@ class MyAppState extends State<MyApp> {
     return Future.value(ret);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Signin(),
+      home: SearchPage(places.updateQueryWithUserLoc, places.searchQuery),
       routes: {
         '/main-menu': (BuildContext context) => MainMenu(user),
         '/adv-search': (BuildContext context) => AdvSearch(),
         '/auth': (BuildContext context) => AuthPage(userGet, userSet),
-        '/search': (BuildContext context) => SearchPage(search.updateQuery, search.searchQuery),
+        '/search': (BuildContext context) => SearchPage(places.updateQueryWithUserLoc, places.searchQuery),
         '/categories-test': (BuildContext context) => CategoriesTest(getCategories),
-        '/search-test': (BuildContext context) => SearchTest(search.updateQuery, search.searchQuery),
-        '/featured': (BuildContext context) => Featured(featured)
+        '/search-test': (BuildContext context) => SearchTest(places.updateQuery, places.searchQuery),
+        '/featured': (BuildContext context) => featured.isNotEmpty ? Featured(featured) : SearchPage(places.updateQueryWithUserLoc, places.searchQuery),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
         if (pathElements[0] != '') return null;
         if (pathElements[1] == 'services') {
           // _fetchResults(pathElements[2]).then((List<Venue> e) => print(e.toString()));
-          return MaterialPageRoute(builder: (BuildContext context) => Results(pathElements[2], search.updateQuery, search.searchQuery));
+          return MaterialPageRoute(builder: (BuildContext context) => Results(pathElements[2], places.updateQuery, places.searchQuery));
         }
       },
       onUnknownRoute: (RouteSettings settings) { return MaterialPageRoute(builder: (BuildContext context) => MainMenu()); }

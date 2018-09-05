@@ -61,7 +61,7 @@ class _SigninState extends State<Signin>{
         Container(margin: EdgeInsets.all(10.0),
           child: RaisedButton(
             child: Text('Login'),
-            onPressed: () => Navigator.pushNamed(context, '/featured'),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/featured'),
           )
         ),
         Container(margin: EdgeInsets.all(10.0),

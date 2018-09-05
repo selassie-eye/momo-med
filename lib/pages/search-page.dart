@@ -25,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
   PopupMenuButton advSearchButton;
   Widget searchTitle;
   Widget searchBody;
-  String query;
+  String keyword;
 
   List<Venue> results = [];
 
@@ -46,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
         icon: Icon(Icons.arrow_forward),
         onPressed: () {
           print('Submitted');
-          widget.update(query: query);
+          widget.update(keyword: keyword);
           setState(() { searchSubmitted = true; });
           _buildSearchPage();
         },
@@ -86,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
             setState(() { searchSubmitted = true; });
             _buildSearchPage();
           },
-          onChanged: (val) { setState(() { query = val; }); },
+          onChanged: (val) { setState(() { keyword = val; }); },
         )
       );
       searchIcon = _buildSearchIcon();      
@@ -169,10 +169,10 @@ class _SearchPageState extends State<SearchPage> {
         onTap: () {
           setState(() { 
             searchSubmitted = true;
-            query = Services.list[index];
+            keyword = Services.list[index];
             //  TODO: category should also be updated here
           });
-          widget.update(query: query);
+          widget.update(keyword: keyword);
           Navigator.pop(context);
           _buildSearchPage();
         }
@@ -204,7 +204,7 @@ class _SearchPageState extends State<SearchPage> {
             trailing: Icon(Icons.star),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/featured');
+              Navigator.pushReplacementNamed(context, '/featured');
             },
           ),
           Divider(),
