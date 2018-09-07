@@ -4,6 +4,8 @@ import 'package:map_view/map_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Venue extends StatelessWidget {
+
+  //  Response fields
   final String id;
   final String place_id;
   final Map<String, dynamic> plus_code;
@@ -12,6 +14,8 @@ class Venue extends StatelessWidget {
   final String vicinity;
   final String reference;
   final String iconURL;
+
+  // Map Fields
   final StaticMapProvider mapProvider;
   Map<String, double> userLoc;
   Location loc2;

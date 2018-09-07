@@ -39,7 +39,7 @@ class Query {
     baseURL += type.isNotEmpty ? '&rankby=$rankBy' : '';
     baseURL += type.isNotEmpty ? '&type=$type' : '';
     baseURL += keyword.isNotEmpty ? '&keyword=$keyword' : '';
-    print(baseURL);
-    return baseURL;
+    print(baseURL.replaceAll(' ', '+').replaceAll(',', '%2C'));
+    return baseURL.replaceAll(' ', '+').replaceAll(',', '%2C');
   }
 }

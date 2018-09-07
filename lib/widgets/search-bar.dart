@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../search.dart';
+import '../model/categories.dart';
 
 class SearchBar extends StatefulWidget {
   final String title;
@@ -90,7 +90,7 @@ class _SearchBarState extends State<SearchBar> {
     setState(() { autocompleteResults = nextACResults; });
   }  
   void _handleQueryUpdate() {
-    List<String> services = Locations.list;
+    List<String> services = Categories.list;
     List<String> nextACResults = [];
 
     if(query.isNotEmpty) {

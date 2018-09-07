@@ -36,7 +36,7 @@ class _Featured extends State<Featured> {
 
   RaisedButton _buildSearchButton(BuildContext context) {
     return RaisedButton(
-      child: Text('Start searching!'),
+      child: Text('Find a medical professional'),
       onPressed: () => Navigator.pushReplacementNamed(context, '/search'),
     );
   }

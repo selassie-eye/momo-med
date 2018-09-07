@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../model/category-tree.dart';
 import '../model/query.dart';
 import '../model/venue.dart';
 
@@ -53,15 +52,18 @@ class GoogleAPI {
     Map<String, dynamic> bodyJSON = {};
     List<dynamic> rawResults = [];
     List<Venue> ret = [];
+    String url = (query.google() + '&key=$googleAPIKey');
     print(query.google() + '&key=$googleAPIKey');
     await http.get(query.google() + '&key=$googleAPIKey').then((http.Response res) {
       if (res.statusCode == 200) {
         bodyJSON = json.decode(res.body);
         rawResults = bodyJSON.containsKey('results') ? bodyJSON['results'] : [];
+        rawResults.forEach((e) => ret.add(Venue.fromJSON({'latitude': userLoc['latitude'], 'longitude': userLoc['longitude']}, mapProvider, e)));
+      } else {
+        ret = [];
       }
     });
     //  print(bodyJSON.toString());
-    rawResults.forEach((e) => ret.add(Venue.fromJSON({'latitude': userLoc['latitude'], 'longitude': userLoc['longitude']}, mapProvider, e)));
     return Future.value(ret);
   }
 }

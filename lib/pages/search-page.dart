@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import './result-details.dart';
 
+import '../model/categories.dart';
 import '../model/venue.dart';
-import '../model/services.dart';
 
 class SearchPage extends StatefulWidget {
   final Function update;
@@ -22,7 +22,6 @@ class _SearchPageState extends State<SearchPage> {
   bool searchSubmitted;
   IconButton sendIcon;
   IconButton searchIcon;
-  PopupMenuButton advSearchButton;
   Widget searchTitle;
   Widget searchBody;
   String keyword;
@@ -35,13 +34,6 @@ class _SearchPageState extends State<SearchPage> {
       isSearching = false;
       searchSubmitted = false;
       searchIcon = _buildSearchIcon();
-      advSearchButton = new PopupMenuButton<String>(
-        onSelected: (String value) => Navigator.pushNamed(context, value),
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-          const PopupMenuItem<String>(
-            value: '/adv-search',
-            child: Text('Advanced Search')
-      ),],);
       sendIcon = IconButton(
         icon: Icon(Icons.arrow_forward),
         onPressed: () {
@@ -106,8 +98,7 @@ class _SearchPageState extends State<SearchPage> {
       title: searchTitle,
       actions: <Widget>[
         sendIcon,
-        searchIcon,
-        advSearchButton,  
+        searchIcon,  
       ],
     );
   }
@@ -132,7 +123,7 @@ class _SearchPageState extends State<SearchPage> {
     Column _buildResultTile(BuildContext context, int index) {
     return Column(children: <Widget>[
       ListTile(
-        leading: Icon(Icons.healing),
+        leading: Image.network(results[index].iconURL),
         title: results[index].name != '' ? Text(results[index].name) : Text('null'),
         onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => ResultDetails(results[index]))),
       ),
@@ -141,7 +132,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildResultsList() {
-    return results.length > 0 ? ListView.builder(
+    return results != null && results.length > 0 ? ListView.builder(
       itemBuilder: _buildResultTile,
       itemCount: results.length,
     ) : Center(child: Text('No results!'));
@@ -164,12 +155,12 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildDrawerItem(BuildContext context, int index) {
     return Column(children: <Widget>[
       ListTile(
-        title: Text(Services.list[index]),
+        title: Text(Categories.list[index]),
         trailing: Icon(Icons.local_hospital),
         onTap: () {
           setState(() { 
             searchSubmitted = true;
-            keyword = Services.list[index];
+            keyword = Categories.list[index];
             //  TODO: category should also be updated here
           });
           widget.update(keyword: keyword);
@@ -183,9 +174,9 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _buildDrawerList() {
     return Expanded(
-      child: Services.list.length > 0 ? ListView.builder(
+      child: Categories.list.length > 0 ? ListView.builder(
         itemBuilder: _buildDrawerItem,
-        itemCount: Services.list.length,
+        itemCount: Categories.list.length,
       ) : Text('Nothing to search.'),
     );
   }

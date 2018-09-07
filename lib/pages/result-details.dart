@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/title.dart';
+import '../widgets/widget-factory.dart';
 import '../model/venue.dart';
 
 class ResultDetails extends StatelessWidget {
@@ -10,7 +10,7 @@ class ResultDetails extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
       return Scaffold(
-        appBar: TitleBar(venue.name),
+        appBar: WidgetFactory.basicAppBar(venue.name),
         body: venue
       );
     }
