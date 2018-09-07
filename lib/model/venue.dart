@@ -78,7 +78,6 @@ class Venue extends StatelessWidget {
   }
 
   Widget _buildVenueCard() {
-    log();
     return Card(child: Column(children: <Widget>[
       Stack(children: <Widget>[
         Container(width: 800.0, height: 200.0, child: Center(child: Text('Loading map...'))),

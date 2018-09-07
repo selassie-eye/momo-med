@@ -14,7 +14,6 @@ class Query {
   List<Venue> results;
 
   Query({String keyword = '', String rankBy = defaultRankBy, double lat = defaultLat, double lng = defaultLng, String type = defaultType}) {
-    print('RankBy: $rankBy');
     this.keyword = keyword;
     this.rankBy = rankBy;
     this.ll.add(lat);
@@ -28,18 +27,15 @@ class Query {
     baseURL += type.isNotEmpty ? '&type=$type' : '';
     baseURL += type.isEmpty ? '&rankby=$rankBy' : '';
     baseURL += keyword.isNotEmpty ? '&keyword=$keyword' : '';
-    print(baseURL);
     return baseURL;
   }
 
   String google() {
-    print('this.rankBy: $rankBy');
     String baseURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
     baseURL += '?location=${ll[0]},${ll[1]}';
     baseURL += type.isNotEmpty ? '&rankby=$rankBy' : '';
     baseURL += type.isNotEmpty ? '&type=$type' : '';
     baseURL += keyword.isNotEmpty ? '&keyword=$keyword' : '';
-    print(baseURL.replaceAll(' ', '+').replaceAll(',', '%2C'));
     return baseURL.replaceAll(' ', '+').replaceAll(',', '%2C');
   }
 }

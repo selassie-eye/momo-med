@@ -24,26 +24,18 @@ class GoogleAPI {
     locServer = new Location();
     updateUserLoc();
     userLocStream = locServer.onLocationChanged();
-    userLocStream.listen((loc) {
-      print(loc);
-      userLoc = loc;
-    });
+    userLocStream.listen((loc) => userLoc = loc);
   }
 
   void updateUserLoc() async {
-    await locServer.getLocation().then((loc) {
-      // print(loc);
-      userLoc = loc;
-    });
+    await locServer.getLocation().then((loc) => userLoc = loc);
   }
 
   Query updateQuery({String keyword = '', String rankBy = Query.defaultRankBy, double lat = Query.defaultLat, double lng = Query.defaultLng, String type = Query.defaultType}) {
-    print('query made');
     return this.query = Query(keyword: keyword, rankBy: rankBy, lat: lat, lng: lng, type: type);
   }
 
     Query updateQueryWithUserLoc({String keyword = '', String rankBy = Query.defaultRankBy, double lng = Query.defaultLng, String type = Query.defaultType}) {
-    print('userloc query made');
     updateUserLoc();
     return this.query = Query(keyword: keyword, rankBy: rankBy, lat: userLoc['latitude'], lng: userLoc['longitude'], type: type);
   }
@@ -53,8 +45,8 @@ class GoogleAPI {
     List<dynamic> rawResults = [];
     List<Venue> ret = [];
     String url = (query.google() + '&key=$googleAPIKey');
-    print(query.google() + '&key=$googleAPIKey');
-    await http.get(query.google() + '&key=$googleAPIKey').then((http.Response res) {
+
+    await http.get(url).then((http.Response res) {
       if (res.statusCode == 200) {
         bodyJSON = json.decode(res.body);
         rawResults = bodyJSON.containsKey('results') ? bodyJSON['results'] : [];
@@ -63,7 +55,6 @@ class GoogleAPI {
         ret = [];
       }
     });
-    //  print(bodyJSON.toString());
     return Future.value(ret);
   }
 }

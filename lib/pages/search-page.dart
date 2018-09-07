@@ -37,7 +37,6 @@ class _SearchPageState extends State<SearchPage> {
       sendIcon = IconButton(
         icon: Icon(Icons.arrow_forward),
         onPressed: () {
-          print('Submitted');
           widget.update(keyword: keyword);
           setState(() { searchSubmitted = true; });
           _buildSearchPage();
@@ -73,9 +72,8 @@ class _SearchPageState extends State<SearchPage> {
           style: TextStyle(color: Colors.white),
           // IOS bug: onSubmitted does not trigger when the "done" button is pressed on the keyboard
           onSubmitted: (val) {
-            print('Submitted');
             widget.update(query: val);
-            setState(() { searchSubmitted = true; });
+            setState(() => searchSubmitted = true);
             _buildSearchPage();
           },
           onChanged: (val) { setState(() { keyword = val; }); },
@@ -104,7 +102,6 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   FutureBuilder _buildResultsFuture() {
-    print('Future called!');
     return FutureBuilder(
       future: widget.search(),
       builder: (context, snapshot) {
@@ -139,17 +136,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void _buildSearchPage() {
-    print('Build search called');
     if(searchSubmitted) {
-      print('Search submitted');
       setState(() { 
         searchBody = _buildResultsFuture(); 
         searchSubmitted = false;
       });
-    } else setState(() { 
-        print('Search not submitted');
-        searchBody = _buildResultsList(); 
-      });
+    } else setState(() => searchBody = _buildResultsList());
   }
 
   Widget _buildDrawerItem(BuildContext context, int index) {
