@@ -29,7 +29,7 @@ class MyAppState extends State<MyApp> {
     void initState() {
       super.initState();
       places = GoogleAPI();
-      places.updateQuery(keyword: 'doctor');
+      places.updateQuery(keyword: 'hospital');
       places.searchQuery().then((val) => featured = val);
     }
 

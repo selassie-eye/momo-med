@@ -15,7 +15,7 @@ class Venue extends StatelessWidget {
   final String reference;
   final String iconURL;
 
-  // Map Fields
+  //  Map Fields
   final StaticMapProvider mapProvider;
   Map<String, double> userLoc;
   Location loc2;

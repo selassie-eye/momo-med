@@ -42,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
           _buildSearchPage();
         },
       );
-      searchTitle = Text('Search');
+      searchTitle = _touchSearchTitle();
       searchBody = Center(child: Text('No results'));
       results = [];
     }
@@ -63,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       isSearching = true;
       searchTitle = Container(
-        padding: EdgeInsets.all(10.0),
+        margin: EdgeInsets.all(10.0),
         child: TextField(
           autofocus: true,
           decoration: InputDecoration(
@@ -83,10 +83,17 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  GestureDetector _touchSearchTitle() {
+    return GestureDetector(
+      child: Text('Search'),
+      onTap: _openSearchBox,
+    );
+  }
+
   void _closeSearchBox() {
     setState(() {
       isSearching = false;
-      searchTitle = Text('Search');
+      searchTitle = _touchSearchTitle();
       searchIcon = _buildSearchIcon();      
     });
   }
